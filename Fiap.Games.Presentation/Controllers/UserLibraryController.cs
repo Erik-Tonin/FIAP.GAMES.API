@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Fiap.Games.Presentation.Controllers
 {
     [Route("api/[controller]")]
-    [Authorize]
+    //[Authorize]
     public class UserLibraryController : ApiController
     {
         private readonly IUserLibraryApplicationService _userLibraryApplicationService;
@@ -18,7 +18,7 @@ namespace Fiap.Games.Presentation.Controllers
             _userLibraryApplicationService = userLibraryApplicationService;
         }
 
-        [Authorize(Roles = "User,Admin")]
+        //[Authorize(Roles = "User,Admin")]
         [HttpPost("AddToLibrary")]
         public async Task<ValidationResultDTO<UserLibrary>> AddToLibrary([FromForm] UserLibraryDTO userLibraryDTO)
         {
@@ -27,7 +27,7 @@ namespace Fiap.Games.Presentation.Controllers
             return user;
         }
 
-        [Authorize(Roles = "User,Admin")]
+        //[Authorize(Roles = "User,Admin")]
         [HttpGet("GetByUserProfileId")]
         public async Task<IEnumerable<UserLibraryDTO>> GetByUserProfileId(Guid userProfileId)
         {

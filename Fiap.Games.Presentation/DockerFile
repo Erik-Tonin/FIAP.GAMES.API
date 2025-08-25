@@ -1,0 +1,28 @@
+﻿FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+WORKDIR /app
+
+COPY *.sln ./
+COPY FIAP.Games.Presentation/*.csproj FIAP.Games.Presentation/
+COPY FIAP.Games.Application/*.csproj FIAP.Games.Application/
+COPY FIAP.Games.Domain/*.csproj FIAP.Games.Domain/
+COPY FIAP.Games.Domain.Core/*.csproj FIAP.Games.Domain.Core/
+COPY FIAP.Games.Infra/*.csproj FIAP.Games.Infra/
+COPY FIAP.Games.Crosscutting/*.csproj FIAP.Games.Crosscutting/
+
+RUN dotnet restore FIAP.Games.Presentation/FIAP.Games.Presentation.csproj
+
+COPY . .
+
+WORKDIR /app/FIAP.Games.Presentation
+RUN dotnet publish FIAP.Games.Presentation.csproj -c Release -o /app/out
+
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
+WORKDIR /app
+
+COPY --from=build /app/out .
+
+ENV ASPNETCORE_URLS=http://+:80
+
+EXPOSE 80
+
+ENTRYPOINT ["dotnet", "FIAP.Games.Presentation.dll"]
